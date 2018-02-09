@@ -15,6 +15,7 @@ We defined some extensions on top of vanilla JSON Schema:
 Some extra possible values for [format](http://json-schema.org/latest/json-schema-validation.html#rfc.section.7) as [annotations](http://json-schema.org/latest/json-schema-validation.html#annotations):
 
 - currency
+- percentage
 
 ## Examples
 
