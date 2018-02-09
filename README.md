@@ -52,16 +52,6 @@ Given the following JSON Schema:
         "cpf",
         "cnpj"
       ]
-      // We will use `enum` with some UI component or `oneOf`?
-      //
-      // "oneOf": [
-      //   { "const": "cpf", "title": "CPF"},
-      //   { "const": "cnpj", "title": "CNPJ"},
-      // ]
-      //
-      // More info:
-      // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.3
-      // https://github.com/json-schema-org/json-schema-spec/issues/57#issuecomment-247861695
     }
   },
   "required": [
@@ -105,6 +95,18 @@ And this JSON Schema Form:
 }
 ```
 
+They are separated schemas and is recommended that your API implements like this:
+
+``` json
+{
+  "schema": {
+    /* your json schema goes here */
+  },
+  "form": {
+    /* your json form schema goes here */
+  }
+}
+```
 
 ## Keywords
 
@@ -145,3 +147,68 @@ An object `"value": {attributes}` where `attributes` is an `"attribute": "val"` 
 - http://schemaform.io
 - https://github.com/mozilla-services/react-jsonschema-form
 - http://jsonforms.io
+
+## Extra info
+
+### enum + options vs oneOf
+
+An alternative for the `enum` + `options` for valitate and present the possibles values for a property is the use of `oneOf` keyword:
+
+``` json
+/** Using enum + options **/
+
+{
+  "schema": {
+    "payer_document_type": {
+      "title": "CPF ou CNPJ?",
+      "type": "string",
+      "enum": [
+        "cpf",
+        "cnpj"
+      ]
+    }
+  },
+  "form": {
+    "payee_document_type": {
+      "tag": "select",
+      "options": {
+        "cpf": "CPF",
+        "cnpj": "CNPJ"
+      }
+    }
+  }
+}
+
+/** Using oneOf **/
+
+{
+  "schema": {
+    "payer_document_type": {
+      "title": "CPF ou CNPJ?",
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "cpf",
+          "title": "CPF"
+        },
+        {
+          "const": "cnpj",
+          "title": "CNPJ"
+        }
+      ]
+    }
+  },
+    "form": {
+    "payee_document_type": {
+      "tag": "select"
+    }
+  }
+}
+```
+
+We prefer to use the enum + options for keep separated the validation from the UI.
+
+More info:
+
+- https://github.com/json-schema-org/json-schema-spec/issues/57#issuecomment-247861695
+- http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.3
